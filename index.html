@@ -49,6 +49,7 @@
   .sbtn:disabled { opacity: .35; cursor: default; }
   .sbtn:not(:disabled):hover { opacity: .88; }
   .smsg { display: none; background: #EAF3DE; border: 1px solid #c5e0a0; border-radius: 12px; padding: 1rem 1.25rem; text-align: center; margin-top: 1rem; font-size: 14px; color: #3B6D11; line-height: 1.6; }
+  .loading { text-align: center; font-size: 13px; color: #aaa; padding: 1rem 0; }
   hr { border: none; border-top: 1px solid #e8e8e8; margin: 2rem 0; }
   .ps h3 { font-size: 15px; font-weight: 600; color: #111; margin-bottom: 14px; }
   .pr { padding: 10px 0; border-bottom: 1px solid #eee; font-size: 13px; }
@@ -61,6 +62,7 @@
 </head>
 <body>
 <div class="wrap">
+
   <h1>Dugnad – Sandane 2026</h1>
   <p class="sub">Kryss av kva dugnadsøkter du kan delta på, og meld deg på nedanfor.</p>
 
@@ -134,55 +136,70 @@
 
   <div class="smsg" id="sm"><p id="st"></p></div>
   <hr>
-  <div class="ps"><h3>Påmeldte</h3><div id="pl"><p class="em">Ingen påmeldte enno.</p></div></div>
+  <div class="ps">
+    <h3>Påmeldte</h3>
+    <div id="pl"><p class="loading">Lastar påmeldingar…</p></div>
+  </div>
   <div class="footer">Dugnad – Sandane 2026</div>
 </div>
 
-<script>
-  let V = new Set(), dv = null;
-  const HN = {
-    1: 'Steinmur 26.–28. juni',
-    '2a': 'Vindauge 12.–14. juni',
-    '2b': 'Vindauge 26.–28. juni',
-    3: 'Grindebygg (juli/aug)',
-    4: 'Torvtak 10.–16. aug'
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey:            "AIzaSyBLWoP8eOPaFnov6B5NAi3t6CxS_NMzKeE",
+    authDomain:        "dugnad-sandane.firebaseapp.com",
+    projectId:         "dugnad-sandane",
+    storageBucket:     "dugnad-sandane.firebasestorage.app",
+    messagingSenderId: "1095292537360",
+    appId:             "1:1095292537360:web:f970f05585b1c8e2d01895"
   };
 
-  function load() {
-    try {
-      const raw = localStorage.getItem('dugnad-sandane-2026');
-      return raw ? JSON.parse(raw) : [];
-    } catch(e) { return []; }
+  const HN = {
+    1:    'Steinmur 26.–28. juni',
+    '2a': 'Vindauge 12.–14. juni',
+    '2b': 'Vindauge 26.–28. juni',
+    3:    'Grindebygg (juli/aug)',
+    4:    'Torvtak 10.–16. aug'
+  };
+
+  let V = new Set(), dv = null;
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  const q = query(collection(db, "paameldte"), orderBy("tid", "asc"));
+  onSnapshot(q, snap => render(snap.docs.map(d => d.data())));
+
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
-  function save(pp) {
-    try { localStorage.setItem('dugnad-sandane-2026', JSON.stringify(pp)); } catch(e) {}
-  }
-
-  function render() {
-    const pp = load();
+  function render(pp) {
     const el = document.getElementById('pl');
-    if (!pp.length) { el.innerHTML = '<p class="em">Ingen påmeldte enno.</p>'; return; }
-    el.innerHTML = pp.map(p =>
-      '<div class="pr"><div class="pn">' + p.nm + '</div>' +
-      (p.km ? '<div style="font-size:12px;color:#888;margin-bottom:3px">' + p.km + '</div>' : '') +
-      '<div class="ph">' + p.h.map(x => '<span class="pp">' + HN[x] + '</span>').join('') + '</div></div>'
-    ).join('');
+    el.innerHTML = pp.length
+      ? pp.map(p =>
+          '<div class="pr"><div class="pn">' + esc(p.nm) + '</div>' +
+          (p.km ? '<div style="font-size:12px;color:#888;margin-bottom:3px">' + esc(p.km) + '</div>' : '') +
+          '<div class="ph">' + p.h.map(x => '<span class="pp">' + (HN[x]||x) + '</span>').join('') + '</div></div>'
+        ).join('')
+      : '<p class="em">Ingen påmeldte enno.</p>';
     document.getElementById('n1').textContent = pp.filter(p => p.h.includes(1)).length;
     document.getElementById('n2').textContent = pp.filter(p => p.h.includes('2a') || p.h.includes('2b')).length;
     document.getElementById('n3').textContent = pp.filter(p => p.h.includes(3)).length;
     document.getElementById('n4').textContent = pp.filter(p => p.h.includes(4)).length;
   }
 
-  function chD(a) {
+  window.chD = a => {
     dv = a;
-    document.getElementById('da').classList.toggle('ch', a === 'a');
-    document.getElementById('db').classList.toggle('ch', a === 'b');
+    document.getElementById('da').classList.toggle('ch', a==='a');
+    document.getElementById('db').classList.toggle('ch', a==='b');
     if (!V.has(2)) { V.add(2); document.getElementById('c2').classList.add('sel'); }
     chk();
-  }
+  };
 
-  function tog(n) {
+  window.tog = n => {
     if (n === 2) {
       if (V.has(2)) {
         V.delete(2); dv = null;
@@ -192,17 +209,18 @@
       }
     } else {
       if (V.has(n)) { V.delete(n); document.getElementById('c'+n).classList.remove('sel'); }
-      else { V.add(n); document.getElementById('c'+n).classList.add('sel'); }
+      else           { V.add(n);   document.getElementById('c'+n).classList.add('sel'); }
     }
     chk();
-  }
+  };
 
   function chk() {
     const nm = document.getElementById('nm').value.trim();
     document.getElementById('sb').disabled = !(nm && V.size > 0 && (!V.has(2) || dv));
   }
+  window.chk = chk;
 
-  function send() {
+  window.send = async () => {
     const nm = document.getElementById('nm').value.trim();
     const km = document.getElementById('km').value.trim();
     if (!nm || V.size === 0) return;
@@ -211,22 +229,24 @@
     if (V.has(2)) h.push('2' + dv);
     if (V.has(3)) h.push(3);
     if (V.has(4)) h.push(4);
-    const pp = load();
-    pp.push({ nm, h, km });
-    save(pp);
-    render();
-    document.getElementById('st').innerHTML = '<strong>' + nm + '</strong> er påmeldt: ' + h.map(x => HN[x]).join(', ') + '. Takk!';
-    document.getElementById('sm').style.display = 'block';
-    document.getElementById('nm').value = '';
-    document.getElementById('km').value = '';
-    V.clear(); dv = null;
-    [1,2,3,4].forEach(n => document.getElementById('c'+n).classList.remove('sel'));
-    document.getElementById('da').classList.remove('ch');
-    document.getElementById('db').classList.remove('ch');
-    document.getElementById('sb').disabled = true;
-  }
-
-  render();
+    const btn = document.getElementById('sb');
+    btn.disabled = true; btn.textContent = 'Sender…';
+    try {
+      await addDoc(collection(db, "paameldte"), { nm, h, km, tid: Date.now() });
+      document.getElementById('st').innerHTML = '<strong>' + esc(nm) + '</strong> er påmeldt: ' + h.map(x => HN[x]).join(', ') + '. Takk!';
+      document.getElementById('sm').style.display = 'block';
+      document.getElementById('nm').value = '';
+      document.getElementById('km').value = '';
+      V.clear(); dv = null;
+      [1,2,3,4].forEach(n => document.getElementById('c'+n).classList.remove('sel'));
+      document.getElementById('da').classList.remove('ch');
+      document.getElementById('db').classList.remove('ch');
+    } catch(e) {
+      alert('Noko gjekk gale. Prøv igjen.');
+    }
+    btn.textContent = 'Meld meg på';
+    chk();
+  };
 </script>
 </body>
 </html>
