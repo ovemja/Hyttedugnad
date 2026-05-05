@@ -32,14 +32,6 @@
   .hc.sel .hchk { background: #3B6D11; border-color: #3B6D11; }
   .cm { display: none; width: 13px; height: 13px; }
   .hc.sel .cm { display: block; }
-  .daw { margin-top: 10px; display: flex; flex-direction: column; gap: 7px; }
-  .da { display: flex; align-items: center; gap: 8px; padding: 8px 11px; border-radius: 8px; border: 1px solid #ddd; background: #f7f7f7; font-size: 13px; color: #555; cursor: pointer; transition: background .12s; }
-  .da:hover { background: #f0f0f0; }
-  .da.ch { background: #EAF3DE; border-color: #3B6D11; color: #3B6D11; font-weight: 600; }
-  .dr { width: 15px; height: 15px; border-radius: 50%; border: 1.5px solid #bbb; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-  .da.ch .dr { border-color: #3B6D11; background: #3B6D11; }
-  .drd { width: 6px; height: 6px; border-radius: 50%; background: #fff; display: none; }
-  .da.ch .drd { display: block; }
   .fs { margin-top: 1.75rem; }
   .fg { margin-bottom: 1rem; }
   .fg label { display: block; font-size: 13px; font-weight: 500; color: #555; margin-bottom: 6px; }
@@ -67,41 +59,42 @@
   <p class="sub">Kryss av kva dugnadsøkter du kan delta på, og meld deg på nedanfor.</p>
 
   <div class="note">Det er ikkje forventa å vere med fleire dagar i strekk – éin dag tel like mykje!</div>
-  <div class="note last">Meld deg gjerne på fleire økter om du kan – då kan vi lettare flytte folk dit behovet er størst når tida kjem.</div>
+  <div class="note">Meld deg gjerne på fleire økter om du kan – då kan vi lettare flytte folk dit behovet er størst når tida kjem.</div>
+  <div class="note last">Passar ingen av datoane? Det er ikkje krise – det vil bli fleire moglegheiter utover hausten, mellom anna montering av kjøkken, maling, vedkløyving og renovering av gjerde.</div>
 
   <p class="slabel">Vel dugnad(ar)</p>
 
+  <!-- 1: Vindauge og dører – 12.-14. juni -->
   <div class="hc" id="c1" onclick="tog(1)">
     <div class="hct">
       <div class="hnum">1</div>
       <div class="hi">
-        <div class="htitle">Steinmur og platning</div>
-        <div class="hdate">26.–28. juni 2026</div>
-        <div class="hdesc">Mure steinmur i forkant, legge bjelkelag og platning. Krev litt kroppstyngde!</div>
+        <div class="htitle">Vindauge og dører</div>
+        <div class="hdate">12.–14. juni 2026</div>
+        <div class="hdesc">Rive gamle vindauge, montere nye vindauge og dører på alle fire sider.</div>
+        <div class="key-tag">Nøkkelperson for montering er på plass</div>
+        <div class="done-tag"><div class="done-dot"></div>Førebuingar utført 10. og 11. juni</div>
         <div class="pax"><span id="n1">0</span>&nbsp;påmeldte</div>
       </div>
       <div class="hchk"><svg class="cm" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     </div>
   </div>
 
+  <!-- 2: Steinmur og platning – 26.-28. juni -->
   <div class="hc" id="c2" onclick="tog(2)">
     <div class="hct">
       <div class="hnum">2</div>
       <div class="hi">
-        <div class="htitle">Vindauge og dører</div>
-        <div class="hdesc">Rive gamle vindauge, montere nye vindauge og dører på alle fire sider.</div>
-        <div class="key-tag">Nøkkelperson for montering er på plass</div>
-        <div class="daw" onclick="event.stopPropagation()">
-          <div class="da" id="da" onclick="chD('a')"><div class="dr"><div class="drd"></div></div>12.–14. juni 2026</div>
-          <div class="da" id="db" onclick="chD('b')"><div class="dr"><div class="drd"></div></div>26.–28. juni 2026</div>
-        </div>
-        <div class="done-tag"><div class="done-dot"></div>Førebuingar utført 10. og 11. juni</div>
+        <div class="htitle">Steinmur og platning</div>
+        <div class="hdate">26.–28. juni 2026</div>
+        <div class="hdesc">Mure steinmur i forkant, legge bjelkelag og platning. Krev litt kroppstyngde!</div>
         <div class="pax"><span id="n2">0</span>&nbsp;påmeldte</div>
       </div>
       <div class="hchk"><svg class="cm" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     </div>
   </div>
 
+  <!-- 3: Montere grindebygg – juli/aug -->
   <div class="hc" id="c3" onclick="tog(3)">
     <div class="hct">
       <div class="hnum">3</div>
@@ -115,6 +108,7 @@
     </div>
   </div>
 
+  <!-- 4: Legge torv på taket – 10.-16. aug -->
   <div class="hc" id="c4" onclick="tog(4)">
     <div class="hct">
       <div class="hnum">4</div>
@@ -158,14 +152,13 @@
   };
 
   const HN = {
-    1:    'Steinmur 26.–28. juni',
-    '2a': 'Vindauge 12.–14. juni',
-    '2b': 'Vindauge 26.–28. juni',
-    3:    'Grindebygg (juli/aug)',
-    4:    'Torvtak 10.–16. aug'
+    1: 'Vindauge 12.–14. juni',
+    2: 'Steinmur 26.–28. juni',
+    3: 'Grindebygg (juli/aug)',
+    4: 'Torvtak 10.–16. aug'
   };
 
-  let V = new Set(), dv = null;
+  let V = new Set();
   const app = initializeApp(firebaseConfig);
   const db  = getFirestore(app);
 
@@ -185,38 +178,20 @@
           '<div class="ph">' + p.h.map(x => '<span class="pp">' + (HN[x]||x) + '</span>').join('') + '</div></div>'
         ).join('')
       : '<p class="em">Ingen påmeldte enno.</p>';
-    document.getElementById('n1').textContent = pp.filter(p => p.h.includes(1)).length;
-    document.getElementById('n2').textContent = pp.filter(p => p.h.includes('2a') || p.h.includes('2b')).length;
-    document.getElementById('n3').textContent = pp.filter(p => p.h.includes(3)).length;
-    document.getElementById('n4').textContent = pp.filter(p => p.h.includes(4)).length;
+    [1,2,3,4].forEach(n => {
+      document.getElementById('n'+n).textContent = pp.filter(p => p.h.includes(n)).length;
+    });
   }
 
-  window.chD = a => {
-    dv = a;
-    document.getElementById('da').classList.toggle('ch', a==='a');
-    document.getElementById('db').classList.toggle('ch', a==='b');
-    if (!V.has(2)) { V.add(2); document.getElementById('c2').classList.add('sel'); }
-    chk();
-  };
-
   window.tog = n => {
-    if (n === 2) {
-      if (V.has(2)) {
-        V.delete(2); dv = null;
-        document.getElementById('c2').classList.remove('sel');
-        document.getElementById('da').classList.remove('ch');
-        document.getElementById('db').classList.remove('ch');
-      }
-    } else {
-      if (V.has(n)) { V.delete(n); document.getElementById('c'+n).classList.remove('sel'); }
-      else           { V.add(n);   document.getElementById('c'+n).classList.add('sel'); }
-    }
+    if (V.has(n)) { V.delete(n); document.getElementById('c'+n).classList.remove('sel'); }
+    else          { V.add(n);   document.getElementById('c'+n).classList.add('sel'); }
     chk();
   };
 
   function chk() {
     const nm = document.getElementById('nm').value.trim();
-    document.getElementById('sb').disabled = !(nm && V.size > 0 && (!V.has(2) || dv));
+    document.getElementById('sb').disabled = !(nm && V.size > 0);
   }
   window.chk = chk;
 
@@ -224,11 +199,7 @@
     const nm = document.getElementById('nm').value.trim();
     const km = document.getElementById('km').value.trim();
     if (!nm || V.size === 0) return;
-    const h = [];
-    if (V.has(1)) h.push(1);
-    if (V.has(2)) h.push('2' + dv);
-    if (V.has(3)) h.push(3);
-    if (V.has(4)) h.push(4);
+    const h = [1,2,3,4].filter(n => V.has(n));
     const btn = document.getElementById('sb');
     btn.disabled = true; btn.textContent = 'Sender…';
     try {
@@ -237,10 +208,8 @@
       document.getElementById('sm').style.display = 'block';
       document.getElementById('nm').value = '';
       document.getElementById('km').value = '';
-      V.clear(); dv = null;
+      V.clear();
       [1,2,3,4].forEach(n => document.getElementById('c'+n).classList.remove('sel'));
-      document.getElementById('da').classList.remove('ch');
-      document.getElementById('db').classList.remove('ch');
     } catch(e) {
       alert('Noko gjekk gale. Prøv igjen.');
     }
