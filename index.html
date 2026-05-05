@@ -16,20 +16,28 @@
   .hc { background: #fff; border: 1.5px solid #e0e0e0; border-radius: 14px; padding: 1rem 1.1rem; margin-bottom: 10px; cursor: pointer; transition: border-color .15s; }
   .hc:hover { border-color: #aaa; }
   .hc.sel { border: 2px solid #3B6D11; background: #fafff7; }
+  .hc.food { border-color: #e0d0f0; }
+  .hc.food:hover { border-color: #9b6fc4; }
+  .hc.food.sel { border: 2px solid #7c4daa; background: #faf7ff; }
   .hct { display: flex; align-items: flex-start; gap: 12px; }
   .hnum { width: 32px; height: 32px; border-radius: 50%; background: #f0f0f0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #777; flex-shrink: 0; }
   .hc.sel .hnum { background: #EAF3DE; color: #3B6D11; }
+  .hc.food.sel .hnum { background: #f0e6ff; color: #7c4daa; }
+  .hc.food .hnum { background: #f5eeff; color: #9b6fc4; }
   .hi { flex: 1; }
   .htitle { font-size: 15px; font-weight: 600; color: #111; margin-bottom: 2px; }
   .hdate { font-size: 13px; color: #666; margin-bottom: 5px; }
   .hdesc { font-size: 13px; color: #666; line-height: 1.5; }
+  .hint { font-size: 12px; color: #888; line-height: 1.5; margin-top: 6px; font-style: italic; }
   .key-tag { display: inline-flex; align-items: center; gap: 5px; margin-top: 7px; border-radius: 6px; padding: 3px 10px; font-size: 12px; background: #EAF3DE; color: #3B6D11; font-weight: 500; }
   .pending-tag { display: inline-flex; align-items: center; gap: 5px; margin-top: 7px; border-radius: 6px; padding: 3px 10px; font-size: 12px; background: #FFF7E6; color: #996600; border: 1px solid #FFE0A0; }
   .done-tag { display: inline-flex; align-items: center; gap: 5px; margin-top: 7px; background: #f3f3f3; border-radius: 6px; padding: 3px 10px; font-size: 12px; color: #666; }
   .done-dot { width: 6px; height: 6px; border-radius: 50%; background: #3B6D11; flex-shrink: 0; }
   .pax { display: inline-flex; margin-top: 9px; background: #f3f3f3; border-radius: 6px; padding: 3px 10px; font-size: 12px; color: #777; }
+  .hc.food .pax { background: #f5eeff; }
   .hchk { width: 22px; height: 22px; border: 1.5px solid #ccc; border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
   .hc.sel .hchk { background: #3B6D11; border-color: #3B6D11; }
+  .hc.food.sel .hchk { background: #7c4daa; border-color: #7c4daa; }
   .cm { display: none; width: 13px; height: 13px; }
   .hc.sel .cm { display: block; }
   .fs { margin-top: 1.75rem; }
@@ -48,8 +56,10 @@
   .pn { color: #111; font-weight: 600; margin-bottom: 5px; }
   .ph { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
   .pp { padding: 3px 10px; border-radius: 20px; font-size: 11px; background: #EAF3DE; color: #3B6D11; font-weight: 600; }
+  .pp.food { background: #f0e6ff; color: #7c4daa; }
   .em { font-size: 13px; color: #aaa; padding: 10px 0; }
   .footer { margin-top: 2.5rem; text-align: center; font-size: 12px; color: #bbb; }
+  .divider { border: none; border-top: 1px solid #eee; margin: 6px 0 14px; }
 </style>
 </head>
 <body>
@@ -64,14 +74,13 @@
 
   <p class="slabel">Vel dugnad(ar)</p>
 
-  <!-- 1: Vindauge og dører – 12.-14. juni -->
   <div class="hc" id="c1" onclick="tog(1)">
     <div class="hct">
       <div class="hnum">1</div>
       <div class="hi">
         <div class="htitle">Vindauge og dører</div>
         <div class="hdate">12.–14. juni 2026</div>
-        <div class="hdesc">Rive gamle vindauge, montere nye vindauge og dører på alle fire sider.</div>
+        <div class="hdesc">Ta ut gamle vindauge, montere nye vindauge og dører på alle fire sider.</div>
         <div class="key-tag">Nøkkelperson for montering er på plass</div>
         <div class="done-tag"><div class="done-dot"></div>Førebuingar utført 10. og 11. juni</div>
         <div class="pax"><span id="n1">0</span>&nbsp;påmeldte</div>
@@ -80,21 +89,19 @@
     </div>
   </div>
 
-  <!-- 2: Steinmur og platning – 26.-28. juni -->
   <div class="hc" id="c2" onclick="tog(2)">
     <div class="hct">
       <div class="hnum">2</div>
       <div class="hi">
         <div class="htitle">Steinmur og platning</div>
         <div class="hdate">26.–28. juni 2026</div>
-        <div class="hdesc">Mure steinmur i forkant, legge bjelkelag og platning. Krev litt kroppstyngde!</div>
+        <div class="hdesc">Mure steinmur i forkant, legge bjelkelag og platning. Krev litt kroppsstyrke!</div>
         <div class="pax"><span id="n2">0</span>&nbsp;påmeldte</div>
       </div>
       <div class="hchk"><svg class="cm" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     </div>
   </div>
 
-  <!-- 3: Montere grindebygg – juli/aug -->
   <div class="hc" id="c3" onclick="tog(3)">
     <div class="hct">
       <div class="hnum">3</div>
@@ -108,12 +115,11 @@
     </div>
   </div>
 
-  <!-- 4: Legge torv på taket – 10.-16. aug -->
   <div class="hc" id="c4" onclick="tog(4)">
     <div class="hct">
       <div class="hnum">4</div>
       <div class="hi">
-        <div class="htitle">Legge torv på taket</div>
+        <div class="htitle">Legge tak og torv på taket</div>
         <div class="hdate">10.–16. august 2026</div>
         <div class="hdesc">Leggje torvtak over platningen. Tungt og jordete arbeid – men synleg resultat!</div>
         <div class="pax"><span id="n4">0</span>&nbsp;påmeldte</div>
@@ -122,9 +128,24 @@
     </div>
   </div>
 
+  <hr class="divider">
+
+  <div class="hc food" id="c5" onclick="tog(5)">
+    <div class="hct">
+      <div class="hnum">🍲</div>
+      <div class="hi">
+        <div class="htitle">Mat og drikke</div>
+        <div class="hdesc">Kan du bidra med mat eller drikke til ein av dugnadane?</div>
+        <div class="hint">Skriv gjerne i merknadsfeltet nedanfor kva helg som passar best for deg.</div>
+        <div class="pax"><span id="n5">0</span>&nbsp;påmeldte</div>
+      </div>
+      <div class="hchk"><svg class="cm" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+  </div>
+
   <div class="fs">
-    <div class="fg"><label for="nm">Ditt namn</label><input type="text" id="nm" placeholder="Ola Nordmann" oninput="chk()"/></div>
-    <div class="fg"><label for="km">Kommentar (valfritt)</label><input type="text" id="km" placeholder="T.d. spesielle ferdigheiter eller hensyn"/></div>
+    <div class="fg"><label for="nm">Ditt namn</label><input type="text" id="nm" placeholder="Lidveig" oninput="chk()"/></div>
+    <div class="fg"><label for="km">Merknad (valfritt)</label><input type="text" id="km" placeholder="T.d. kva helg som passar, ferdigheiter o.l."/></div>
     <button class="sbtn" id="sb" onclick="send()" disabled>Meld meg på</button>
   </div>
 
@@ -155,7 +176,8 @@
     1: 'Vindauge 12.–14. juni',
     2: 'Steinmur 26.–28. juni',
     3: 'Grindebygg (juli/aug)',
-    4: 'Torvtak 10.–16. aug'
+    4: 'Torvtak 10.–16. aug',
+    5: 'Mat og drikke'
   };
 
   let V = new Set();
@@ -175,10 +197,12 @@
       ? pp.map(p =>
           '<div class="pr"><div class="pn">' + esc(p.nm) + '</div>' +
           (p.km ? '<div style="font-size:12px;color:#888;margin-bottom:3px">' + esc(p.km) + '</div>' : '') +
-          '<div class="ph">' + p.h.map(x => '<span class="pp">' + (HN[x]||x) + '</span>').join('') + '</div></div>'
+          '<div class="ph">' + p.h.map(x =>
+            '<span class="pp' + (x===5?' food':'') + '">' + (HN[x]||x) + '</span>'
+          ).join('') + '</div></div>'
         ).join('')
       : '<p class="em">Ingen påmeldte enno.</p>';
-    [1,2,3,4].forEach(n => {
+    [1,2,3,4,5].forEach(n => {
       document.getElementById('n'+n).textContent = pp.filter(p => p.h.includes(n)).length;
     });
   }
@@ -199,7 +223,7 @@
     const nm = document.getElementById('nm').value.trim();
     const km = document.getElementById('km').value.trim();
     if (!nm || V.size === 0) return;
-    const h = [1,2,3,4].filter(n => V.has(n));
+    const h = [1,2,3,4,5].filter(n => V.has(n));
     const btn = document.getElementById('sb');
     btn.disabled = true; btn.textContent = 'Sender…';
     try {
@@ -209,7 +233,7 @@
       document.getElementById('nm').value = '';
       document.getElementById('km').value = '';
       V.clear();
-      [1,2,3,4].forEach(n => document.getElementById('c'+n).classList.remove('sel'));
+      [1,2,3,4,5].forEach(n => document.getElementById('c'+n).classList.remove('sel'));
     } catch(e) {
       alert('Noko gjekk gale. Prøv igjen.');
     }
