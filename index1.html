@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dugnad – Sandane 2026</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #f7f7f5; min-height: 100vh; padding: 1.5rem 1rem 3rem; }
+  .wrap { max-width: 420px; margin: 0 auto; }
+  h1 { font-size: 22px; font-weight: 600; color: #111; margin-bottom: 4px; }
+  .sub { font-size: 14px; color: #666; line-height: 1.5; margin-bottom: 1.25rem; }
+  .note { background: #fff; border: 1px solid #e5e5e5; border-radius: 10px; padding: 10px 14px; margin-bottom: .75rem; font-size: 13px; color: #555; line-height: 1.6; }
+  .note.last { margin-bottom: 1.5rem; }
+  .slabel { font-size: 11px; font-weight: 700; color: #999; letter-spacing: .07em; text-transform: uppercase; margin-bottom: 10px; }
+  .hc { background: #fff; border: 1.5px solid #e0e0e0; border-radius: 14px; padding: 1rem 1.1rem; margin-bottom: 10px; cursor: pointer; transition: border-color .15s; }
+  .hc:hover { border-color: #aaa; }
+  .hc.sel { border: 2px solid #3B6D11; background: #fafff7; }
+  .hct { display: flex; align-items: flex-start; gap: 12px; }
+  .hnum { width: 32px; height: 32px; border-radius: 50%; background: #f0f0f0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #777; flex-shrink: 0; }
+  .hc.sel .hnum { background: #EAF3DE; color: #3B6D11; }
+  .hi { flex: 1; }
+  .htitle { font-size: 15px; font-weight: 600; color: #111; margin-bottom: 2px; }
+  .hdate { font-size: 13px; color: #666; margin-bottom: 5px; }
+  .hdesc { font-size: 13px; color: #666; line-height: 1.5; }
+  .key-tag { display: inline-flex; align-items: center; gap: 5px; margin-top: 7px; border-radius: 6px; padding: 3px 10px; font-size: 12px; background: #EAF3DE; color: #3B6D11; font-weight: 500; }
+  .pending-tag { display: inline-flex; align-items: center; gap: 5px; margin-top: 7px; border-radius: 6px; padding: 3px 10px; font-size: 12px; background: #FFF7E6; color: #996600; border: 1px solid #FFE0A0; }
+  .done-tag { display: inline-flex; align-items: center; gap: 5px; margin-top: 7px; background: #f3f3f3; border-radius: 6px; padding: 3px 10px; font-size: 12px; color: #666; }
+  .done-dot { width: 6px; height: 6px; border-radius: 50%; background: #3B6D11; flex-shrink: 0; }
+  .pax { display: inline-flex; margin-top: 9px; background: #f3f3f3; border-radius: 6px; padding: 3px 10px; font-size: 12px; color: #777; }
+  .hchk { width: 22px; height: 22px; border: 1.5px solid #ccc; border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .hc.sel .hchk { background: #3B6D11; border-color: #3B6D11; }
+  .cm { display: none; width: 13px; height: 13px; }
+  .hc.sel .cm { display: block; }
+  .daw { margin-top: 10px; display: flex; flex-direction: column; gap: 7px; }
+  .da { display: flex; align-items: center; gap: 8px; padding: 8px 11px; border-radius: 8px; border: 1px solid #ddd; background: #f7f7f7; font-size: 13px; color: #555; cursor: pointer; transition: background .12s; }
+  .da:hover { background: #f0f0f0; }
+  .da.ch { background: #EAF3DE; border-color: #3B6D11; color: #3B6D11; font-weight: 600; }
+  .dr { width: 15px; height: 15px; border-radius: 50%; border: 1.5px solid #bbb; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .da.ch .dr { border-color: #3B6D11; background: #3B6D11; }
+  .drd { width: 6px; height: 6px; border-radius: 50%; background: #fff; display: none; }
+  .da.ch .drd { display: block; }
+  .fs { margin-top: 1.75rem; }
+  .fg { margin-bottom: 1rem; }
+  .fg label { display: block; font-size: 13px; font-weight: 500; color: #555; margin-bottom: 6px; }
+  .fg input { width: 100%; padding: 10px 12px; border: 1.5px solid #ddd; border-radius: 9px; font-size: 15px; background: #fff; outline: none; transition: border-color .15s; }
+  .fg input:focus { border-color: #3B6D11; }
+  .sbtn { width: 100%; padding: 12px; border-radius: 10px; background: #3B6D11; border: none; color: #fff; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: .5rem; transition: opacity .15s; }
+  .sbtn:disabled { opacity: .35; cursor: default; }
+  .sbtn:not(:disabled):hover { opacity: .88; }
+  .smsg { display: none; background: #EAF3DE; border: 1px solid #c5e0a0; border-radius: 12px; padding: 1rem 1.25rem; text-align: center; margin-top: 1rem; font-size: 14px; color: #3B6D11; line-height: 1.6; }
+  hr { border: none; border-top: 1px solid #e8e8e8; margin: 2rem 0; }
+  .ps h3 { font-size: 15px; font-weight: 600; color: #111; margin-bottom: 14px; }
+  .pr { padding: 10px 0; border-bottom: 1px solid #eee; font-size: 13px; }
+  .pn { color: #111; font-weight: 600; margin-bottom: 5px; }
+  .ph { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+  .pp { padding: 3px 10px; border-radius: 20px; font-size: 11px; background: #EAF3DE; color: #3B6D11; font-weight: 600; }
+  .em { font-size: 13px; color: #aaa; padding: 10px 0; }
+  .footer { margin-top: 2.5rem; text-align: center; font-size: 12px; color: #bbb; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Dugnad – Sandane 2026</h1>
+  <p class="sub">Kryss av kva dugnadsøkter du kan delta på, og meld deg på nedanfor.</p>
+
+  <div class="note">Det er ikkje forventa å vere med fleire dagar i strekk – éin dag tel like mykje!</div>
+  <div class="note last">Meld deg gjerne på fleire økter om du kan – då kan vi lettare flytte folk dit behovet er størst når tida kjem.</div>
+
+  <p class="slabel">Vel dugnad(ar)</p>
+
+  <div class="hc" id="c1" onclick="tog(1)">
+    <div class="hct">
+      <div class="hnum">1</div>
+      <div class="hi">
+        <div class="htitle">Steinmur og platning</div>
+        <div class="hdate">26.–28. juni 2026</div>
+        <div class="hdesc">Mure steinmur i forkant, legge bjelkelag og platning. Krev litt kroppstyngde!</div>
+        <div class="pax"><span id="n1">0</span>&nbsp;påmeldte</div>
+      </div>
+      <div class="hchk"><svg class="cm" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+  </div>
+
+  <div class="hc" id="c2" onclick="tog(2)">
+    <div class="hct">
+      <div class="hnum">2</div>
+      <div class="hi">
+        <div class="htitle">Vindauge og dører</div>
+        <div class="hdesc">Rive gamle vindauge, montere nye vindauge og dører på alle fire sider.</div>
+        <div class="key-tag">Nøkkelperson for montering er på plass</div>
+        <div class="daw" onclick="event.stopPropagation()">
+          <div class="da" id="da" onclick="chD('a')"><div class="dr"><div class="drd"></div></div>12.–14. juni 2026</div>
+          <div class="da" id="db" onclick="chD('b')"><div class="dr"><div class="drd"></div></div>26.–28. juni 2026</div>
+        </div>
+        <div class="done-tag"><div class="done-dot"></div>Førebuingar utført 10. og 11. juni</div>
+        <div class="pax"><span id="n2">0</span>&nbsp;påmeldte</div>
+      </div>
+      <div class="hchk"><svg class="cm" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+  </div>
+
+  <div class="hc" id="c3" onclick="tog(3)">
+    <div class="hct">
+      <div class="hnum">3</div>
+      <div class="hi">
+        <div class="htitle">Montere grindebygg</div>
+        <div class="hdesc">Reise grindverket – sjølve hovudløftet i prosjektet. Dato er ikkje endeleg fastsett.</div>
+        <div class="pending-tag">Truleg 17.–19. juli eller 7.–9. august</div>
+        <div class="pax"><span id="n3">0</span>&nbsp;påmeldte</div>
+      </div>
+      <div class="hchk"><svg class="cm" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+  </div>
+
+  <div class="hc" id="c4" onclick="tog(4)">
+    <div class="hct">
+      <div class="hnum">4</div>
+      <div class="hi">
+        <div class="htitle">Legge torv på taket</div>
+        <div class="hdate">10.–16. august 2026</div>
+        <div class="hdesc">Leggje torvtak over platningen. Tungt og jordete arbeid – men synleg resultat!</div>
+        <div class="pax"><span id="n4">0</span>&nbsp;påmeldte</div>
+      </div>
+      <div class="hchk"><svg class="cm" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+  </div>
+
+  <div class="fs">
+    <div class="fg"><label for="nm">Ditt namn</label><input type="text" id="nm" placeholder="Ola Nordmann" oninput="chk()"/></div>
+    <div class="fg"><label for="km">Kommentar (valfritt)</label><input type="text" id="km" placeholder="T.d. spesielle ferdigheiter eller hensyn"/></div>
+    <button class="sbtn" id="sb" onclick="send()" disabled>Meld meg på</button>
+  </div>
+
+  <div class="smsg" id="sm"><p id="st"></p></div>
+  <hr>
+  <div class="ps"><h3>Påmeldte</h3><div id="pl"><p class="em">Ingen påmeldte enno.</p></div></div>
+  <div class="footer">Dugnad – Sandane 2026</div>
+</div>
+
+<script>
+  let V = new Set(), dv = null;
+  const HN = {
+    1: 'Steinmur 26.–28. juni',
+    '2a': 'Vindauge 12.–14. juni',
+    '2b': 'Vindauge 26.–28. juni',
+    3: 'Grindebygg (juli/aug)',
+    4: 'Torvtak 10.–16. aug'
+  };
+
+  function load() {
+    try {
+      const raw = localStorage.getItem('dugnad-sandane-2026');
+      return raw ? JSON.parse(raw) : [];
+    } catch(e) { return []; }
+  }
+
+  function save(pp) {
+    try { localStorage.setItem('dugnad-sandane-2026', JSON.stringify(pp)); } catch(e) {}
+  }
+
+  function render() {
+    const pp = load();
+    const el = document.getElementById('pl');
+    if (!pp.length) { el.innerHTML = '<p class="em">Ingen påmeldte enno.</p>'; return; }
+    el.innerHTML = pp.map(p =>
+      '<div class="pr"><div class="pn">' + p.nm + '</div>' +
+      (p.km ? '<div style="font-size:12px;color:#888;margin-bottom:3px">' + p.km + '</div>' : '') +
+      '<div class="ph">' + p.h.map(x => '<span class="pp">' + HN[x] + '</span>').join('') + '</div></div>'
+    ).join('');
+    document.getElementById('n1').textContent = pp.filter(p => p.h.includes(1)).length;
+    document.getElementById('n2').textContent = pp.filter(p => p.h.includes('2a') || p.h.includes('2b')).length;
+    document.getElementById('n3').textContent = pp.filter(p => p.h.includes(3)).length;
+    document.getElementById('n4').textContent = pp.filter(p => p.h.includes(4)).length;
+  }
+
+  function chD(a) {
+    dv = a;
+    document.getElementById('da').classList.toggle('ch', a === 'a');
+    document.getElementById('db').classList.toggle('ch', a === 'b');
+    if (!V.has(2)) { V.add(2); document.getElementById('c2').classList.add('sel'); }
+    chk();
+  }
+
+  function tog(n) {
+    if (n === 2) {
+      if (V.has(2)) {
+        V.delete(2); dv = null;
+        document.getElementById('c2').classList.remove('sel');
+        document.getElementById('da').classList.remove('ch');
+        document.getElementById('db').classList.remove('ch');
+      }
+    } else {
+      if (V.has(n)) { V.delete(n); document.getElementById('c'+n).classList.remove('sel'); }
+      else { V.add(n); document.getElementById('c'+n).classList.add('sel'); }
+    }
+    chk();
+  }
+
+  function chk() {
+    const nm = document.getElementById('nm').value.trim();
+    document.getElementById('sb').disabled = !(nm && V.size > 0 && (!V.has(2) || dv));
+  }
+
+  function send() {
+    const nm = document.getElementById('nm').value.trim();
+    const km = document.getElementById('km').value.trim();
+    if (!nm || V.size === 0) return;
+    const h = [];
+    if (V.has(1)) h.push(1);
+    if (V.has(2)) h.push('2' + dv);
+    if (V.has(3)) h.push(3);
+    if (V.has(4)) h.push(4);
+    const pp = load();
+    pp.push({ nm, h, km });
+    save(pp);
+    render();
+    document.getElementById('st').innerHTML = '<strong>' + nm + '</strong> er påmeldt: ' + h.map(x => HN[x]).join(', ') + '. Takk!';
+    document.getElementById('sm').style.display = 'block';
+    document.getElementById('nm').value = '';
+    document.getElementById('km').value = '';
+    V.clear(); dv = null;
+    [1,2,3,4].forEach(n => document.getElementById('c'+n).classList.remove('sel'));
+    document.getElementById('da').classList.remove('ch');
+    document.getElementById('db').classList.remove('ch');
+    document.getElementById('sb').disabled = true;
+  }
+
+  render();
+</script>
+</body>
+</html>
